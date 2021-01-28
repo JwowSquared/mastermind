@@ -1,15 +1,70 @@
 // declare globals
 var colors = ["red", "blue", "yellow", "green", "black", "white"];
-var code = genCode();
-var solution = genSolution();
-var next = document.getElementsByClassName("next")[0];
-var idx = -1;
-var gameLive = true;
+var next;
+var code;
+var solution;
+var idx;
+var gameLive;
 
-//the only function i directly call, the rest are tied to the next button
-createBoard();
+//This is the only function I call directly
+newGame();
 
 // a whole bunch of functions
+function newGame() {
+	code = genCode();
+	solution = genSolution();
+	idx = -1;
+	gameLive = true;
+	
+	var board = document.getElementById("board");
+	while (board.firstChild) {
+		board.removeChild(board.firstChild);
+	}
+	
+	var temp = document.createElement("h1");
+	temp.innerHTML = "Mastermind";
+	board.appendChild(temp);
+	
+	temp = document.createElement("div");
+	temp.className = "restart";
+	temp.innerHTML = "New Game";
+	board.appendChild(temp);
+	temp.addEventListener("click", function() {
+		newGame();
+	}, false);
+	
+	temp = document.createElement("div");
+	temp.className = "next";
+	temp.innerHTML = "Start";
+	board.appendChild(temp);
+	temp.addEventListener("click", function() {
+		if (gameLive && idx < 10) {
+			if (idx == -1) {
+				idx++;
+				this.innerHTML = "Submit";
+			} else {
+				fullGuess = getGuess();
+				if (checkFull(fullGuess)) {
+					handlePegs(fullGuess);
+					if (checkWin(fullGuess)) {
+						gameLive = false;
+						alert("You Won! Solution was " + solution + ".");
+					} else {
+						idx++;
+					}
+				} else {
+					alert("Only complete guesses can be submitted.");
+				}
+			}
+		}
+		if (idx > 9) {
+			alert("You Lose! Solution was " + solution + ".");
+		}
+	}, false);
+	next = document.getElementsByClassName("next")[0];
+	createBoard();
+}
+
 function genSolution() {
 	var out = ""
 	var sep = "";
@@ -98,7 +153,7 @@ function handlePegs(fullGuess) {
 	var row = document.getElementsByClassName("row")[idx];
 	var slots = row.children[0].children;
 	if (idx < 9) {
-		next.style.top = String(110 + 134 * (1 + idx)) + "px";
+		next.style.top = String(160 + 134 * (1 + idx)) + "px";
 	}
 	var pegs = [0, 0, 0, 0];
 	var numRed = 0, numWhite = 0;
@@ -161,29 +216,3 @@ function createBoard() {
 	}
 	return (board);
 }
-
-// game logic within the next button
-next.addEventListener("click", function() {
-	if (gameLive && idx < 10) {
-		if (idx == -1) {
-			idx++;
-			this.innerHTML = "Submit";
-		} else {
-			fullGuess = getGuess();
-			if (checkFull(fullGuess)) {
-				handlePegs(fullGuess);
-				if (checkWin(fullGuess)) {
-					gameLive = false;
-					alert("You Won! Solution was " + solution + ".");
-				} else {
-					idx++;
-				}
-			} else {
-				alert("Only complete guesses can be submitted.");
-			}
-		}
-	}
-	if (idx > 9) {
-		alert("You Lose! Solution was " + solution + ".");
-	}
-}, false);

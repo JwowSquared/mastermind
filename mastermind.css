@@ -8,6 +8,19 @@ h1 {
 	margin: 20px;
 }
 
+.restart {
+	width: 90px;
+	height: 90px;
+	border: solid 3px black;
+	text-align: center;
+	line-height: 90px;
+	font-size: 15px;
+	background-color: #00910a;
+	position: absolute;
+	left: 30px;
+	top: 30px;
+}
+
 .next {
 	width: 90px;
 	height: 90px;
@@ -18,10 +31,10 @@ h1 {
 	background-color: #00910a;
 	position: absolute;
 	left: 30px;
-	top: 110px;
+	top: 160px;
 }
 
-.next:hover {
+.next:hover, .restart:hover {
 	background-color: #3dba46;
 }
 
@@ -32,6 +45,7 @@ h1 {
 	overflow: auto;
 	border: solid 4px black;
 	position: relative;
+	padding-top: 50px;
 }
 
 .row {
